@@ -1,9 +1,8 @@
 package com.senati.resl_api.Service;
 
+import com.senati.resl_api.MODEL.Response;
 import com.senati.resl_api.MODEL.Users;
 import com.senati.resl_api.Repository.UsersRepository;
-import org.apache.catalina.User;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +21,27 @@ public class UsersService {
     public List<Users> getAllUsers(){
         return usersRepository.findAll();
     }
+
     public ResponseEntity<Users> saveUser(@RequestBody Users users){
         return new ResponseEntity<>(usersRepository.save(users), HttpStatus.OK);
     }
-    public void deleteUser(@PathVariable("id")Integer id) {
-        usersRepository.deleteById(id);
+
+    public Response deleteUser(@PathVariable("id")Integer id) {
+        Optional<Users>optionalUsers = usersRepository.findById(id);
+        Response response = new Response();
+        if (optionalUsers.isPresent()){
+            response.setCode(200);
+            response.setStatus("success");
+            response.setMessage("la fila con el id : " + id + "lo han matado");
+            return response;
+        }
+        response.setCode(404);
+        response.setStatus("error");
+        response.setMessage("el usuario se ha salvado");
+        return response;
     }
+
+
     public ResponseEntity<Users> updateUser(@PathVariable("id") Integer id, @RequestBody Users users) {
         Optional<Users> optionalUsers = usersRepository.findById(id);
 
@@ -41,5 +55,7 @@ public class UsersService {
 
         return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
     }
+
+
 
 }
