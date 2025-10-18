@@ -1,5 +1,5 @@
 package com.senati.resl_api.MODEL;
-
+//hola, este mensaje es para el informe d:v/-<
 public class Response {
     private int code;
     private String status;
